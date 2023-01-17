@@ -3,6 +3,7 @@ package com.example.javamysql;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DbUtil extends DbUtilData {
@@ -21,4 +22,29 @@ public class DbUtil extends DbUtilData {
         } catch (SQLException e) {
         }
     }
+
+    public static void printData(Connection conn, String query, String... columnNames) throws SQLException {
+        try (PreparedStatement statement = conn.prepareStatement(query);
+                ResultSet resultSet = statement.executeQuery();) {
+            while (resultSet.next()) {
+                for (String columnName : columnNames) {
+                    System.out.println(resultSet.getString(columnName));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static final String DELETE_QUERY = "DELETE FROM tableName WHERE id = ?";
+
+public static void remove(Connection conn, String tableName, int id) {
+    try (PreparedStatement statement = 
+                    conn.prepareStatement(DELETE_QUERY.replace("tableName", tableName));) {
+        statement.setInt(1, id);
+        statement.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 }
