@@ -13,31 +13,15 @@ public class Main07 {
         while (scan.hasNextLine()) {
             switch (scan.next()) {
                 case "add":
-                Scanner scanAdd = new Scanner(System.in);
-                System.out.println("Select name");
-                String name = scanAdd.nextLine();
-                System.out.println("Select adress");
-                String adress = scanAdd.nextLine();
-                String query = "INSERT INTO cinemas (id,name,address) VALUES (NULL,?,?);";
-                DbUtil.insert(DbUtil.connect("cinemas_ex2"), query, name, adress);
-                start();
-                break;
+                    addData();
+                    break;
 
                 case "edit":
                     editData();
                     break;
 
                 case "delete":
-                    Scanner scanDelete = new Scanner(System.in);
-                    System.out.println("Select id to delete");
-                    int id = scanDelete.nextInt();
-                    System.out.println("Are you sure you want delete this cinema?\nY: N:");
-                    String check = scan.next();
-                    if (check.toLowerCase().equals("y")) {
-                        DbUtil.remove(DbUtil.connect("cinemas_ex2"), "cinemas", id);
-                        start();
-                    }
-                    start();
+                    deleteData(scan);
                     break;
 
                 case "exit":
@@ -49,6 +33,30 @@ public class Main07 {
                     break;
             }
         }
+    }
+
+    private static void deleteData(Scanner scan) throws SQLException {
+        Scanner scanDelete = new Scanner(System.in);
+        System.out.println("Select id to delete");
+        int id = scanDelete.nextInt();
+        System.out.println("Are you sure you want delete this cinema?\nY: N:");
+        String check = scan.next();
+        if (check.toLowerCase().equals("y")) {
+            DbUtil.remove(DbUtil.connect("cinemas_ex2"), "cinemas", id);
+            start();
+        }
+        start();
+    }
+
+    private static void addData() throws SQLException {
+        Scanner scanAdd = new Scanner(System.in);
+        System.out.println("Select name");
+        String name = scanAdd.nextLine();
+        System.out.println("Select adress");
+        String adress = scanAdd.nextLine();
+        String query = "INSERT INTO cinemas (id,name,address) VALUES (NULL,?,?);";
+        DbUtil.insert(DbUtil.connect("cinemas_ex2"), query, name, adress);
+        start();
     }
 
     private static void editData() throws SQLException {
